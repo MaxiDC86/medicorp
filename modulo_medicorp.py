@@ -18,6 +18,32 @@ def load_login_info():
         user_passwords.append(lines[i].rstrip('\n').split(','))
     f.close()
     return user_names, user_passwords
+    
+def menu():
+    print("""
+    ****** Bienvenid@ al menu de Medicorp ******
+    Ingrese a una de las siguientes opciones con el número asignado:
+    1 para alta de paciente,
+    2 para alta de turno,
+    3 para modificar datos del paciente,
+    4 para baja de paciente,
+    5 para listar turnos según dia y mes,
+    6 para listar pacientes,
+    7 para buscar turno según DNI,
+    8 para cargar datos de prueba,
+    0 para salir del programa.
+    ******************************************************************
+    """)
+    while True:
+        try:
+            menu_selection = int(input())
+            assert (menu_selection>= 0 and menu_selection <=9), "Opción ingresada incorrecta"
+        except AssertionError as error:
+            clear()
+            print(error)
+        else:
+            break
+    return menu_selection
 
 def login(load):
 # Se chequea que el usuario existe.
