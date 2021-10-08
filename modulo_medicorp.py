@@ -4,21 +4,43 @@ import sys
 class max_attempts_reached(Exception):
     pass
 
-def load_login_info():
-    user_names = []
-    user_passwords = []
-    with open('user_names.txt', 'r') as f:
-        lines = f.readlines()
-    for i in range(len(lines)):
-        user_names.append(lines[i].rstrip('\n').split(','))
-    f.close()
-    with open('user_passwords.txt', 'r') as f:
-        lines = f.readlines()
-    for i in range(len(lines)):
-        user_passwords.append(lines[i].rstrip('\n').split(','))
-    f.close()
-    return user_names, user_passwords
-    
+
+def login(lista_usuarios,lista_contrasenias,error=0):
+    """
+    IN: lista de usuarios y lista de contraseñas.
+    OUT: acceso permitido o denegado True/False + usuario + contraseña.
+    """
+    permitido=False
+    usuario=input("Ingrese su usuario: ")
+    contrasenia=input("Ingrese su contraseña: ")
+    e_usuario=lista_usuarios.count(usuario)   #Cuenta las veces que aparece el usuario en la lista
+    while e_usuario==0:    #Si no aparece
+        error=error+1
+        print("Datos incorrectos, por favor vuelva a ingresar sus datos")
+        usuario=input("Ingrese su usuario: ")
+        contrasenia=input("Ingrese su contraseña: ")
+        if error==3:
+            print("Limite de intentos alcanzados, acceso dengado")
+            permitido=False
+            break
+        e_usuario=lista_usuarios.count(usuario)
+    else:
+        pos_usuario=lista_usuarios.index(usuario)   #Si aparece busca la posicion
+        while usuario not in lista_usuarios or pos_usuario==-1 or contrasenia!=lista_contrasenias[pos_usuario]:
+            error=error+1
+            if error==3:
+                print("Limite de intentos alcanzados, acceso denegado")
+                permitido=False
+                break
+            print("Datos incorrectos, por favor vuelva a ingresar sus datos")
+            usuario=input("Ingrese su usuario: ")
+            contrasenia=input("Ingrese su contraseña: ")
+            pos_usuario=lista_usuarios.index(usuario)
+        else:
+            permitido=True
+
+    return permitido,usuario
+
 def menu():
     print("""
     ****** Bienvenid@ al menu de Medicorp ******
@@ -36,7 +58,9 @@ def menu():
     """)
     while True:
         try:
-            menu_selection = int(input())
+            menu_selection = input()
+            assert (menu_selection.isnumeric() == True) ,"Debe ingresar un número"
+            menu_selection = int(menu_selection)
             assert (menu_selection>= 0 and menu_selection <=9), "Opción ingresada incorrecta"
         except AssertionError as error:
             clear()
@@ -45,37 +69,66 @@ def menu():
             break
     return menu_selection
 
-def login(load):
-# Se chequea que el usuario existe.
-# Se compara la contraseña ingresada con la guardada.
-# Si todo es correcto devuelve el usuario.tg 
-    print("***** Bienvenid@ a Medicorp *****")
-    user_names, user_passwords = load
-    attempts = 3
-    while True:
-        try:
-            if attempts <= 0:
-                raise max_attempts_reached
-            attempts -= 1
-            user = input("Ingrese su usuario: ")
-            password = input("Ingrese su contraseña: ")       
-            assert ([user] in user_names), "El usuario no existe."
-            password_index = user_names.index([user])
-            assert ([password] == user_passwords[password_index]), "La contraseña es incorrecta."
-        except AssertionError as error:
-            clear()
-            print(error) 
-        except max_attempts_reached:
-            clear()
-            print("Se detectó 3 intentos fallidos.")
-            break
-        except:
-            clear()
-            print("Error inesperado:", sys.exc_info()[0])
-            raise
-        else:
-            clear()
-            return user 
+
+def listar_pacientes():
+    try:
+        pacientes = open('datos_pacientes.txt','r')
+    except IOError:
+        print("No se pudo leer el archivo")
+    else:
+        print("Listado de pacientes en el sistema: ")
+        linea = pacientes.readline()
+        while linea != '':	
+            linea = linea.rstrip()
+            paciente = linea.split(';')
+            dni = int(paciente[0])
+            apellido = paciente[1]
+            nombre = paciente[2]
+            edad = int(paciente[3])
+            print(f'DNI:{dni:08d} APELLIDO: {apellido:<15s}' + 
+            f'NOMBRE: {nombre:<15s} EDAD: {edad:02d}')
+            linea = pacientes.readline()
+    finally:
+        print()
+        exit = input("Presione cualquier tecla para continuar al menu principal")
+
+def alta_paciente():
+    try:
+        pacientes = open('datos_pacientes.txt','r')
+    except FileNotFoundError:
+        print("El archivo de paciente no se encuentra.")
+    except:
+        print("Error inesperado")
+    else:
+        lista_dni = []
+        linea = pacientes.readline()
+        while linea != '':	
+            linea = linea.rstrip()
+            paciente = linea.split(';')
+            dni = int(paciente[0])
+            lista_dni.append(dni)
+            linea = pacientes.readline()
+        print(lista_dni)
+    try:
+        pacientes = open('datos_pacientes.txt','a')
+    except:
+        print("Error inesperado")
+    else:
+        dni = int(input('Ingrese el DNI del paciente: '))
+        while dni in lista_dni:
+            dni = int(input('ERROR: el dni ingresado ya existe. Ingrese el DNI del paciente: '))
+        apellido = input('Ingrese el apellido del paciente: ')
+        nombre = input('Ingrese el nombre del paciente: ')
+        edad = int(input('Ingrese edad del paciente: '))
+        while edad <=17:
+            print("La edad mínima es 18 años.")
+            edad = int(input('Ingrese edad del paciente: '))
+        paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), str(edad)]
+        paciente = ';'.join(paciente)
+        pacientes.write(paciente + '\n')
+    finally:
+        print()
+        exit = input("Presione cualquier tecla para continuar al menu principal")
 
 def run():
     pass
