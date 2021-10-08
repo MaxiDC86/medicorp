@@ -1,6 +1,6 @@
 import os; clear = lambda: os.system('cls'); clear()
 import sys
-from modulo_medicorp import alta_paciente, listar_pacientes, login, menu
+from modulo_medicorp import cargar_pacientes_dni, modificar_paciente, alta_paciente, listar_pacientes, login, menu
 
 
 def run():
@@ -21,7 +21,14 @@ def run():
         if menu_selection == 2:
             pass
         if menu_selection == 3:
-            pass
+            clear()
+            dni = int(input("Ingrese el DNI del paciente a modificar sus datos: "))
+            lista_dni = cargar_pacientes_dni()
+            if dni in lista_dni :
+                modificar_paciente(dni)
+            else:
+                print("El paciente no existe en la base de datos")
+                exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 4:
             pass
         if menu_selection == 5:

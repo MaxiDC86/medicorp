@@ -1,6 +1,7 @@
 import os; clear = lambda: os.system('cls'); clear()
 import sys
 
+
 class max_attempts_reached(Exception):
     pass
 
@@ -69,10 +70,34 @@ def menu():
             break
     return menu_selection
 
-
+def modificar_paciente(modificar_datos_dni):
+    try:
+        pacientes = open('.\medicorp\datos_pacientes.txt','r')
+    except IOError:
+        print("No se pudo leer el archivo")
+    else:
+        linea = pacientes.readline()
+        while linea != '':	
+            linea = linea.rstrip()
+            paciente = linea.split(';')
+            dni = paciente[0]
+            if dni == modificar_datos_dni:
+                pacientes = open('.\medicorp\datos_pacientes.txt','w')
+                apellido = input("Ingrese apellido del paciente: ")
+                nombre = input("Ingrese nombre del paciente: ")
+                edad = int(input('Ingrese edad del paciente: '))
+                paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), str(edad)]
+                paciente = ';'.join(paciente)
+                pacientes.write(paciente)
+                print(f'Paciente con DNI {dni} modificado con exito.')
+            linea = pacientes.readline()
+    finally:
+        print()
+        exit = input("Presione enter para continuar al menu principal")
+    
 def listar_pacientes():
     try:
-        pacientes = open('datos_pacientes.txt','r')
+        pacientes = open('.\medicorp\datos_pacientes.txt','r')
     except IOError:
         print("No se pudo leer el archivo")
     else:
@@ -90,11 +115,11 @@ def listar_pacientes():
             linea = pacientes.readline()
     finally:
         print()
-        exit = input("Presione cualquier tecla para continuar al menu principal")
+        exit = input("Presione enter para continuar al menu principal")
 
-def alta_paciente():
+def cargar_pacientes_dni():
     try:
-        pacientes = open('datos_pacientes.txt','r')
+        pacientes = open('.\medicorp\datos_pacientes.txt','r')
     except FileNotFoundError:
         print("El archivo de paciente no se encuentra.")
     except:
@@ -108,9 +133,12 @@ def alta_paciente():
             dni = int(paciente[0])
             lista_dni.append(dni)
             linea = pacientes.readline()
-        print(lista_dni)
+    return lista_dni
+
+def alta_paciente():
+    lista_dni = cargar_pacientes_dni()
     try:
-        pacientes = open('datos_pacientes.txt','a')
+        pacientes = open('.\medicorp\datos_pacientes.txt','a')
     except:
         print("Error inesperado")
     else:
@@ -128,7 +156,7 @@ def alta_paciente():
         pacientes.write(paciente + '\n')
     finally:
         print()
-        exit = input("Presione cualquier tecla para continuar al menu principal")
+        exit = input("Presione enter para continuar al menu principal")
 
 def run():
     pass
