@@ -11,6 +11,8 @@ def run():
     clear()
     if permitido == True:
         print(f'El usuario {user} ha ingresado correctamente.')
+    else:
+        return print("Los datos de login son incorrectos")
     while True:
         clear()
         menu_selection = menu()
@@ -34,10 +36,10 @@ def run():
         if menu_selection == 5:
             pass
         if menu_selection == 6:
+            pass
+        if menu_selection == 7:
             clear()
             listar_pacientes()
-        if menu_selection == 7:
-            pass
         if menu_selection == 8:
             pass
         if menu_selection == 9:
@@ -46,6 +48,7 @@ def run():
             break
             
     clear()
-    print("Gracias por utilizar MEDICORP SOFTWARE SOLUTIONS")
+
 if __name__ == '__main__':
     run()
+    print("Gracias por utilizar MEDICORP SOFTWARE SOLUTIONS")

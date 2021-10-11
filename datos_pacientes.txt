@@ -21,3 +21,6 @@
 21327721;Gonzalez;Marcos;18
 1111111;Martinez;Raul;77
 88888888;Alegre;Florencia;28
+32881882;Zubeldia;Wenceslao;19
+95935019;Monascal;Omi;23
+98567234;Diaz;Pedro;45
