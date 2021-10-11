@@ -97,7 +97,7 @@ def modificar_paciente(modificar_datos_dni):
     
 def listar_pacientes():
     try:
-        pacientes = open('.\medicorp\datos_pacientes.txt','r')
+        pacientes = open('datos_pacientes.txt','r')
     except IOError:
         print("No se pudo leer el archivo")
     else:
