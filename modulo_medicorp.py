@@ -84,8 +84,76 @@ def modificar_paciente(modificar_datos_dni):
     finally:
         print()
         exit = input("Presione enter para continuar al menu principal")
-    
+
+def pacientes_a_listas():
+    """
+    Leemos el archivo y pasamos los datos de los pacientes a listas.
+    """
+    try:
+        arch=open("datos_pacientes.txt","r")
+    except IOError:
+        print("No se pudo leer el archivo")
+    except:
+        print("Ocurrió un error inesperado")
+    else:
+        lista_dni=[]
+        lista_nombre=[]
+        lista_apellido=[]
+        lista_edad=[]
+        linea=arch.readline()
+        while linea != "":
+            linea=linea.rstrip()
+            pacientes=linea.split(";")
+            lista_dni.append(pacientes[0])
+            lista_apellido.append(pacientes[1])
+            lista_nombre.append(pacientes[2])
+            lista_edad.append(pacientes[3])
+            linea=arch.readline()
+    return lista_dni,lista_apellido,lista_nombre,lista_edad
+
+def ordenar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad):
+    """
+    Se ordena las listas de la pacientes según los apellidos.
+    Se utiliza el metodo de incersión.
+    """
+    for i in range(1,len(lista_apellido)):
+        apellido_aux=lista_apellido[i]
+        nombre_aux=lista_nombre[i]
+        dni_aux=lista_dni[i]
+        edad_aux=lista_edad[i]
+        j=i
+        while j>0 and lista_apellido[j-1]>apellido_aux:
+            lista_apellido[j]=lista_apellido[j-1]
+            lista_nombre[j]=lista_nombre[j-1]
+            lista_dni[j]=lista_dni[j-1]
+            lista_edad[j]=lista_edad[j-1]
+            j=j-1
+        lista_apellido[j]=apellido_aux
+        lista_nombre[j]=nombre_aux
+        lista_dni[j]=dni_aux
+        lista_edad[j]=edad_aux
+
+
+def grabar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad):
+    """
+    Se graban las listas de los datos de los pacientes en el archivo.
+    """
+    try:
+        arch=open("datos_pacientes.txt","w")
+    except IOError:
+        print("No se pudo leer el archivo")
+    except:
+        print("Ocurrió un error inesperado")
+    else:
+        for i in range(len(lista_dni)):
+            paciente=[lista_dni[i],lista_apellido[i],lista_nombre[i],lista_edad[i]]
+            paciente=";".join(paciente)
+            arch.write(paciente+"\n")
+
 def listar_pacientes():
+    """
+    Imprime en pantalla el archivo.
+    """
     try:
         pacientes = open('datos_pacientes.txt','r')
     except IOError:
@@ -100,7 +168,7 @@ def listar_pacientes():
             apellido = paciente[1]
             nombre = paciente[2]
             edad = int(paciente[3])
-            print(f'DNI:{dni:08d} APELLIDO: {apellido:<15s}' + 
+            print(f'DNI:{dni:08d}   APELLIDO: {apellido:<15s}' + 
             f'NOMBRE: {nombre:<15s} EDAD: {edad:02d}')
             linea = pacientes.readline()
     finally:
@@ -108,6 +176,11 @@ def listar_pacientes():
         exit = input("Presione enter para continuar al menu principal")
 
 def cargar_pacientes_dni():
+    """
+    Se leen el archivo que contiene todos los pacientes dados de alta.
+    Se carga en una lista los DNI de los pacientes.
+    Se retorna la lista.
+    """
     try:
         pacientes = open('datos_pacientes.txt','r')
     except FileNotFoundError:

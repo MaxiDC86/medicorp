@@ -1,6 +1,6 @@
 import os; clear = lambda: os.system('cls'); clear()
 import sys
-from modulo_medicorp import cargar_pacientes_dni, modificar_paciente, alta_paciente, listar_pacientes, login, menu
+from modulo_medicorp import *
 
 
 def run():
@@ -39,6 +39,9 @@ def run():
             pass
         if menu_selection == 7:
             clear()
+            d,a,n,e = pacientes_a_listas()
+            ordenar_pacientes(d,a,n,e)
+            grabar_pacientes(d,a,n,e)
             listar_pacientes()
         if menu_selection == 8:
             pass
