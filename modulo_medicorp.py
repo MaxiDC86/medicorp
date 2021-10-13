@@ -199,7 +199,7 @@ def cargar_pacientes_dni():
     return lista_dni
 
 def validar_dni(dni):
-    while dni.isnumeric() == False or dni.count("") !=8:
+    while dni.isnumeric() == False or int(dni)>99999999 or int(dni)<1000000:
         print("DNI ingresado es inválido.")
         dni = input('Ingrese el DNI del paciente: ')
     return dni
@@ -213,21 +213,29 @@ def alta_paciente():
     except:
         print("Error inesperado")
     else:
-        dni = input('Ingrese el DNI del paciente: ')
-        while int(dni) in lista_dni:
-            dni = input('ERROR: el dni ingresado ya existe. Ingrese el DNI del paciente: ')
-            validar_dni(dni)
-
-        apellido = input('Ingrese el apellido del paciente: ')
-        nombre = input('Ingrese el nombre del paciente: ')
-        edad = int(input('Ingrese edad del paciente: '))
-        while edad <=17:
-            print("La edad mínima es 18 años.")
-            edad = int(input('Ingrese edad del paciente: '))
-        paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), str(edad)]
-        paciente = ';'.join(paciente)
-        pacientes.write(paciente + '\n')
-        print("Los datos del nuevo paciente se agregaron existosamente.")
+        while True:
+            try:
+                dni = input('Ingrese el DNI del paciente: ')
+                dni = validar_dni(dni)
+                while int(dni) in lista_dni:
+                    dni = input('ERROR: el dni ingresado ya existe. Ingrese el DNI del paciente: ')
+                    dni = validar_dni(dni)
+            except TypeError:
+                print ('Error de tipo')
+            except:
+                print ('Error inesperado')
+            else:
+                apellido = input('Ingrese el apellido del paciente: ')
+                nombre = input('Ingrese el nombre del paciente: ')
+                edad = int(input('Ingrese edad del paciente: '))
+                while edad <=17:
+                    print("La edad mínima es 18 años.")
+                    edad = int(input('Ingrese edad del paciente: '))
+                paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), str(edad)]
+                paciente = ';'.join(paciente)
+                pacientes.write(paciente + '\n')
+                print("Los datos del nuevo paciente se agregaron existosamente.")
+                break
     finally:
         print()
         exit = input("Presione enter para continuar al menu principal")

@@ -5,8 +5,8 @@ from modulo_medicorp import *
 
 def run():
     print("MEDICORP SOFTWARE SOLUTIONS")
-    lista_usuarios=["medicorp","admin"]
-    lista_contrasenias=["1234","4321abc"]
+    lista_usuarios=("medicorp","admin")
+    lista_contrasenias=("1234","4321abc")
     permitido,user=login(lista_usuarios,lista_contrasenias)
     clear()
     if permitido == True:
