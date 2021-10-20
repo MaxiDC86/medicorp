@@ -44,6 +44,8 @@ def menu():
     7 para listar pacientes,
     8 para buscar turno según DNI,
     9 para cargar datos de prueba,
+    10 para buscar paciente,
+    11 para listar pacientes segun edad ingresada,
     0 para salir del programa.
     ******************************************************************
     """)
@@ -220,19 +222,25 @@ def alta_paciente():
                 print ('Error inesperado')
             else:
                 apellido = input('Ingrese el apellido del paciente: ')
+                while apellido.isalpha()==False:
+                    print("El apellido del paciente es inválido.")
+                    apellido = input('Ingrese el apellido del paciente: ')
                 nombre = input('Ingrese el nombre del paciente: ')
-                edad = int(input('Ingrese edad del paciente: '))
-                while edad <=17:
-                    print("La edad mínima es 18 años.")
-                    edad = int(input('Ingrese edad del paciente: '))
-                paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), str(edad)]
+                while nombre.isalpha()==False:
+                    print("El nombre del paciente es inválido.")
+                    nombre = input('Ingrese el apellido del paciente: ')
+                edad =input('Ingrese edad del paciente: ')
+                while edad.isnumeric()!=True or int(edad)<18:
+                    if edad.isnumeric()!=True:
+                        print("Se permiten solo numeros.")
+                    else:
+                        print("Debe ser mayor de edad.")
+                    edad =input('Ingrese edad del paciente: ')
+                paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), edad]
                 paciente = ';'.join(paciente)
                 pacientes.write(paciente + '\n')
                 print("Los datos del nuevo paciente se agregaron existosamente.")
                 break
-    finally:
-        print()
-        exit = input("Presione enter para continuar al menu principal")
 
 def baja_paciente(lista_dni,lista_apellido,lista_nombre,lista_edad):
     dni=input("""Has elegido dar de baja un paciente. 

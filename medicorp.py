@@ -18,8 +18,8 @@ def run():
         menu_selection = menu()
         # Se ejecutan las distintas funciones selecionadas.
         if menu_selection == 1:
- 
             alta_paciente()
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 2:
             pass
         if menu_selection == 3:
@@ -35,7 +35,6 @@ def run():
             d,a,n,e = pacientes_a_listas()
             baja_paciente(d,a,n,e)
             grabar_pacientes(d,a,n,e)
-            
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 5:
             pass
@@ -52,6 +51,8 @@ def run():
         if menu_selection == 8:
             pass
         if menu_selection == 9:
+            pass
+        if menu_selection == 10:
             pass
         if menu_selection == 0:
             break
