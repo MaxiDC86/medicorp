@@ -81,16 +81,13 @@ def modificar_paciente(modificar_datos_dni):
                 pacientes.write(paciente)
                 print(f'Paciente con DNI {dni} modificado con exito.')
             linea = pacientes.readline()
-    finally:
-        print()
-        exit = input("Presione enter para continuar al menu principal")
 
 def pacientes_a_listas():
     """
     Leemos el archivo y pasamos los datos de los pacientes a listas.
     """
     try:
-        arch=open("datos_pacientes.txt","r")
+        arch=open("datos_pacientes.txt",'r')
     except IOError:
         print("No se pudo leer el archivo")
     except:
@@ -152,7 +149,7 @@ def grabar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad):
 
 def listar_pacientes():
     """
-    Imprime en pantalla el archivo.
+    Imprime en pantalla el archivo de pacientes dados de alta.
     """
     try:
         pacientes = open('datos_pacientes.txt','r')
@@ -171,10 +168,7 @@ def listar_pacientes():
             print(f'DNI:{dni:08d}   APELLIDO: {apellido:<15s}' + 
             f'NOMBRE: {nombre:<15s} EDAD: {edad:02d}')
             linea = pacientes.readline()
-    finally:
-        print()
-        exit = input("Presione enter para continuar al menu principal")
-
+      
 def cargar_pacientes_dni():
     """
     Se leen el archivo que contiene todos los pacientes dados de alta.
@@ -239,6 +233,20 @@ def alta_paciente():
     finally:
         print()
         exit = input("Presione enter para continuar al menu principal")
+
+def baja_paciente(lista_dni,lista_apellido,lista_nombre,lista_edad):
+    dni=input("""Has elegido dar de baja un paciente. 
+    Ingrese el DNI del paciente a dar de baja: """)
+    veces=lista_dni.count(dni)
+    if veces==0:
+        print("El paciente no fue dado de alta.")
+    else:
+        pos=lista_dni.index(dni)
+        lista_dni.pop(pos)
+        lista_apellido.pop(pos)
+        lista_nombre.pop(pos)
+        lista_edad.pop(pos)
+        print("Paciente dado de baja correctamente.")
 
 def run():
     pass

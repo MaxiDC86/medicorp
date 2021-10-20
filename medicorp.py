@@ -18,7 +18,7 @@ def run():
         menu_selection = menu()
         # Se ejecutan las distintas funciones selecionadas.
         if menu_selection == 1:
-            clear()
+ 
             alta_paciente()
         if menu_selection == 2:
             pass
@@ -31,8 +31,12 @@ def run():
             else:
                 print("El paciente no existe en la base de datos")
                 exit = input("Presione enter para continuar al menu principal")
-        if menu_selection == 4:
-            pass
+        if menu_selection == 4: # Dar de baja un paciente.
+            d,a,n,e = pacientes_a_listas()
+            baja_paciente(d,a,n,e)
+            grabar_pacientes(d,a,n,e)
+            
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 5:
             pass
         if menu_selection == 6:
@@ -43,6 +47,8 @@ def run():
             ordenar_pacientes(d,a,n,e)
             grabar_pacientes(d,a,n,e)
             listar_pacientes()
+            print()
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 8:
             pass
         if menu_selection == 9:
