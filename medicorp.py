@@ -17,12 +17,17 @@ def run():
         clear()
         menu_selection = menu()
         # Se ejecutan las distintas funciones selecionadas.
-        if menu_selection == 1:
+        if menu_selection == 1: #DAr de alta un paciente.
             alta_paciente()
             exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 2:
-            pass
-        if menu_selection == 3:
+            print("Ha selecionado dar de alta un turno.")
+            dni = input("Ingrese el DNI del paciente: ")
+            alta_turno(dni)
+            exit = input("Presione enter para continuar al menu principal")
+
+        if menu_selection == 3: # Modificar los datos de un paciente.
             clear()
             dni = int(input("Ingrese el DNI del paciente a modificar sus datos: "))
             lista_dni = cargar_pacientes_dni()
@@ -31,16 +36,18 @@ def run():
             else:
                 print("El paciente no existe en la base de datos")
                 exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 4: # Dar de baja un paciente.
             d,a,n,e = pacientes_a_listas()
             baja_paciente(d,a,n,e)
             grabar_pacientes(d,a,n,e)
             exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 5:
-            pass
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 6:
-            pass
-        if menu_selection == 7:
+            exit = input("Presione enter para continuar al menu principal")
+        if menu_selection == 7: # Listar en pantalla todos los pacientes dados de alta.
             clear()
             d,a,n,e = pacientes_a_listas()
             ordenar_pacientes(d,a,n,e)
@@ -48,12 +55,14 @@ def run():
             listar_pacientes()
             print()
             exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 8:
-            pass
+            buscar_turno()
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 9:
-            pass
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 10:
-            pass
+            exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 0:
             break
             
