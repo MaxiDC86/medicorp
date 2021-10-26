@@ -248,6 +248,7 @@ def baja_paciente(lista_dni,lista_apellido,lista_nombre,lista_edad):
     if veces==0:
         print("El paciente no fue dado de alta.")
     else:
+        borrar_turno(dni)
         pos=lista_dni.index(dni)
         lista_dni.pop(pos)
         lista_apellido.pop(pos)
@@ -258,7 +259,7 @@ def baja_paciente(lista_dni,lista_apellido,lista_nombre,lista_edad):
 def alta_turno(dni):
     lista_dni = cargar_pacientes_dni()
     lista_turnos, lista_turnos_dni = cargar_turnos_lista()
-    if int(dni) in lista_dni: # SE chequea que el dni esta dado de alta.
+    if int(dni) in lista_dni: # Se chequea que el dni esta dado de alta.
         if dni not in lista_turnos_dni: # Se chequea que el dni no tenga un turno asignado.
             try:
                 turnos = open('turnos.txt','a')
@@ -286,14 +287,18 @@ def alta_turno(dni):
                         print("Debe serentre 1 y 12.")
                     month = input("Ingrese el mes: ")
                     month = month.rstrip()
-                day = input("Ingrese el dia:")
+                day = input("Ingrese el dia del turno (1, 8, 15 y 22 de no hay turnos): ")
                 day = day.rstrip()
-                while day.isnumeric()!=True or int(day)<1 or int(day) >31:
-                    if day.isnumeric()!=True:
+                while True:
+                    if int(day)<1 or int(day) >31:
+                        print("Valor ingresado inválido.")
+                    elif day.isnumeric()!=True:
                         print("Se permiten solo 2 numeros para indicar del dia.")
-                    else:
-                        print("Debe ser entre 1 y 31.")
-                    day = input("Ingrese el mes: ")
+                    elif int(day) == 1 or int(day) == 8 or int(day) == 15 or int(day) == 22:
+                        print("Esa fecha no se atienden pacientes.")
+                    else:                       
+                        break
+                    day = input("Ingrese el dia del turno (1, 8, 15 y 22 de no hay turnos): ")
                     day = day.rstrip()
                 hour = input("Ingrese la hora: ")
                 hour = hour.rstrip()
@@ -309,6 +314,7 @@ def alta_turno(dni):
                 if turno not in lista_turnos: # Se chequea que el turno no este tomado.
                     turno = turno + ";" + dni
                     turnos.write(turno + '\n')
+                    print("El turno ha sido agendado, recuerde llegar 10 minutos antes.")
                 else:
                     print("El turno ya está tomado.")
         else:
@@ -354,6 +360,25 @@ def buscar_turno():
             print(f'El paciente ya tiene un turno para {lista_turnos[position]}')
     else:
         print("El DNI no esta dado de alta.")
+
+def borrar_turno(dni):
+    lista_turnos, lista_turnos_dni = cargar_turnos_lista()
+    if dni in lista_turnos_dni: # Se chequea que el dni esta dado de alta.
+        pos=lista_turnos_dni.index(dni)
+        lista_turnos_dni.pop(pos)
+        lista_turnos.pop(pos)
+        try:
+            turnos = open('turnos.txt','w')
+        except FileNotFoundError:
+                print("El archivo de paciente no se encuentra.")
+        except:
+                print("Error inesperado")
+        else:
+            for turno in lista_turnos:
+                for dni in lista_turnos_dni:
+                    turno = turno + ";" + dni
+                    turnos.write(turno + '\n')
+
 def run():
     pass
 

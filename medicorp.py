@@ -17,7 +17,7 @@ def run():
         clear()
         menu_selection = menu()
         # Se ejecutan las distintas funciones selecionadas.
-        if menu_selection == 1: #DAr de alta un paciente.
+        if menu_selection == 1: #Dar de alta un paciente.
             alta_paciente()
             exit = input("Presione enter para continuar al menu principal")
 
@@ -44,6 +44,8 @@ def run():
             exit = input("Presione enter para continuar al menu principal")
 
         if menu_selection == 5:
+            dni = input("Ingrese el DNI a dar de baja el turno: ")
+            borrar_turno(dni)
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 6:
             exit = input("Presione enter para continuar al menu principal")
@@ -57,11 +59,15 @@ def run():
             exit = input("Presione enter para continuar al menu principal")
 
         if menu_selection == 8:
+            print("Ha elegido buscar turno según DNI.")
             buscar_turno()
             exit = input("Presione enter para continuar al menu principal")
+            
         if menu_selection == 9:
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 10:
+            exit = input("Presione enter para continuar al menu principal")
+        if menu_selection == 11:
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 0:
             break
