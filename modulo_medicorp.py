@@ -110,12 +110,14 @@ def pacientes_a_listas():
             linea=arch.readline()
     return lista_dni,lista_apellido,lista_nombre,lista_edad
 
-def ordenar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad):
+def ordenar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad,i=1):
     """
     Se ordena las listas de la pacientes según los apellidos.
-    Se utiliza el metodo de incersión.
+    Se utiliza el metodo de incersión con recursividad.
     """
-    for i in range(1,len(lista_apellido)):
+    if i==len(lista_apellido):
+        return lista_dni,lista_apellido,lista_nombre,lista_edad
+    else:
         apellido_aux=lista_apellido[i]
         nombre_aux=lista_nombre[i]
         dni_aux=lista_dni[i]
@@ -131,6 +133,7 @@ def ordenar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad):
         lista_nombre[j]=nombre_aux
         lista_dni[j]=dni_aux
         lista_edad[j]=edad_aux
+        return ordenar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad,i+1)
 
 def grabar_pacientes(lista_dni,lista_apellido,lista_nombre,lista_edad):
     """
