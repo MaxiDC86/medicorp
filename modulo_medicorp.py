@@ -2,7 +2,7 @@ import os; clear = lambda: os.system('cls'); clear()
 import sys
 
 
-class max_attempts_reached(Exception):
+class edad_min_invalid(Exception):
     pass
 
 
@@ -54,35 +54,13 @@ def menu():
             menu_selection = input()
             assert (menu_selection.isnumeric() == True) ,"Debe ingresar un número"
             menu_selection = int(menu_selection)
-            assert (menu_selection>= 0 and menu_selection <=9), "Opción ingresada incorrecta"
+            assert (menu_selection>= 0 and menu_selection <=14), "Opción ingresada incorrecta"
         except AssertionError as error:
             clear()
             print(error)
         else:
             break
     return menu_selection
-
-def modificar_paciente(modificar_datos_dni):
-    try:
-        pacientes = open('datos_pacientes.txt','r')
-    except IOError:
-        print("No se pudo leer el archivo")
-    else:
-        linea = pacientes.readline()
-        while linea != '':	
-            linea = linea.rstrip()
-            paciente = linea.split(';')
-            dni = paciente[0]
-            if dni == modificar_datos_dni:
-                pacientes = open('datos_pacientes.txt','w')
-                apellido = input("Ingrese apellido del paciente: ")
-                nombre = input("Ingrese nombre del paciente: ")
-                edad = int(input('Ingrese edad del paciente: '))
-                paciente= [str(dni),apellido.capitalize(), nombre.capitalize(), str(edad)]
-                paciente = ';'.join(paciente)
-                pacientes.write(paciente)
-                print(f'Paciente con DNI {dni} modificado con exito.')
-            linea = pacientes.readline()
 
 def pacientes_a_listas():
     """
@@ -364,7 +342,37 @@ def buscar_turno():
     else:
         print("El DNI no esta dado de alta.")
 
+def buscar_pacientes():
+    try:
+        input_dni = int(input("Ingrese el DNI del paciente: "))
+        lista_dni = cargar_pacientes_dni()
+        if input_dni in lista_dni and type(input_dni) == int:
+            try:
+                archivo = open("datos_pacientes.txt",'r')
+                pacientes = archivo.readlines()
+                for paciente in pacientes:
+                    if paciente.startswith(str(input_dni)):
+                        paciente_lista = paciente.split(";") 
+                        print(f"DNI: {paciente_lista[0]}")
+                        print(f"Apellido: {paciente_lista[1]}")
+                        print(f"Nombre: {paciente_lista[2]}")
+                        print(f"Edad: {paciente_lista[3]}")
+            except FileNotFoundError:
+                print('Archivo no disponible.')
+        else:
+            print('No hay registros con ese DNI.')
+    except ValueError:
+        print('DNI no valido.')
+    except:
+        print("Error inesperado.")
+
 def borrar_turno(dni):
+    """
+    Se cargan los turnos en una lista y los DNI en otra lista. 
+    Cada lista está indexada con su respectiva posición.
+    Se elimina el DNI que ingresa por teclado si existe.
+    luego se vuelve a escribir en el archivo los restantes turnos.
+    """
     lista_turnos, lista_turnos_dni = cargar_turnos_lista()
     if dni in lista_turnos_dni: # Se chequea que el dni esta dado de alta.
         pos=lista_turnos_dni.index(dni)
@@ -381,6 +389,71 @@ def borrar_turno(dni):
                 for dni in lista_turnos_dni:
                     turno = turno + ";" + dni
                     turnos.write(turno + '\n')
+
+def listadoMayores(lista_DNI, lista_apellido,lista_nombres, lista_edades ):
+    '''
+    Función que lista los pacientes según una determinada edad ingresada por teclado.
+    '''
+    try:
+        edadMin=int(input("Ingrese la edad mínima del listado de pacientes: "))
+        assert edadMin >17, 'La edad mínima es 18 años'
+    except ValueError:
+        print('Edad no valida.')
+    except AssertionError as error:
+        print(error)
+    except:
+        print("Error inesperado.")
+    else:
+        dicc= {'listaEdadesMayores':[], 'listaDNI':[], 'listaApellidos':[], 'listaNombres':[]}
+        for i in range(len(lista_edades)):
+            if int(lista_edades[i])>=edadMin: 
+                dicc['listaEdadesMayores'].append(lista_edades[i])
+                dicc['listaDNI'].append(lista_DNI[i])
+                dicc['listaApellidos'].append(lista_apellido[i])
+                dicc['listaNombres'].append(lista_nombres[i])
+        for i in range(len(dicc['listaNombres'])):
+            dni=int(dicc['listaDNI'][i])
+            apellido=dicc['listaApellidos'][i]
+            nombre=dicc['listaNombres'][i]
+            edad=int(dicc['listaEdadesMayores'][i])
+            print(f'DNI:{dni:08d}   APELLIDO: {apellido:<15s}' + 
+                f'NOMBRE: {nombre:<15s} EDAD: {edad:02d}')
+
+def modificar_paciente(lista_dni, lista_apellido, lista_nombre, lista_edad):
+    dni= input("ingrese el dni del paciente a modificar:")
+    dni= validar_dni(dni)
+    lista_dni= cargar_pacientes_dni()
+    lista_dnicont= lista_dni.count(int(dni))
+    if lista_dnicont != 0:
+        pos= lista_dni.index(int(dni))
+        nombre= input("ingrese el nombre del paciente:")
+        nombre= validar_nombre(nombre)
+        lista_nombre[pos]= nombre.title() 
+        apellido= input("ingrese el apellido del paciente:")
+        apellido= validar_apellido(apellido)
+        lista_apellido[pos]= apellido.title()
+        edad= int(input("ingrese la edad del paciente:"))
+        edad= validar_edad(int(edad))
+        lista_edad[pos]= str(edad)
+        print(f'Paciente con DNI {dni} modificado con exito.')
+
+def validar_apellido(apellido):
+    while apellido.isalpha() == False:
+        print("error, el apellido ingresado es invalido")
+        apellido= input("ingrese un nombre valido:")
+    return apellido
+
+def validar_nombre(nombre):
+    while nombre.isalpha() == False:
+        print("error, el nombre ingresado es invalido")
+        nombre= input("ingrese un nombre valido:")
+    return nombre
+
+def validar_edad(edad):
+    while str(edad).isnumeric() == False or int(edad) >100 or int(edad) < 18:
+        print("error, la edad ingresada no es valida")
+        edad= int(input("ingrese una edad valida:"))
+    return edad
 
 def run():
     pass

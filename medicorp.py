@@ -29,13 +29,12 @@ def run():
 
         if menu_selection == 3: # Modificar los datos de un paciente.
             clear()
-            dni = int(input("Ingrese el DNI del paciente a modificar sus datos: "))
-            lista_dni = cargar_pacientes_dni()
-            if dni in lista_dni :
-                modificar_paciente(dni)
-            else:
-                print("El paciente no existe en la base de datos")
-                exit = input("Presione enter para continuar al menu principal")
+            d,a,n,e = pacientes_a_listas()
+            modificar_paciente(d, a, n, e)
+            ordenar_pacientes(d,a,n,e)
+            grabar_pacientes(d,a,n,e)
+
+            exit = input("Presione enter para continuar al menu principal")
 
         if menu_selection == 4: # Dar de baja un paciente.
             d,a,n,e = pacientes_a_listas()
@@ -66,8 +65,12 @@ def run():
         if menu_selection == 9:
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 10:
+            buscar_pacientes()
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 11:
+            print("Ha elegido listar pacientes según edad selecionada.")
+            d,a,n,e = pacientes_a_listas()
+            listadoMayores(d,a,n,e)
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 0:
             break
