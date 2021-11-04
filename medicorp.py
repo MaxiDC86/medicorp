@@ -46,8 +46,12 @@ def run():
             dni = input("Ingrese el DNI a dar de baja el turno: ")
             borrar_turno(dni)
             exit = input("Presione enter para continuar al menu principal")
+            
         if menu_selection == 6:
+            d,a,n,e = pacientes_a_listas()
+            lista_turnos_2(n, a, d)
             exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 7: # Listar en pantalla todos los pacientes dados de alta.
             clear()
             d,a,n,e = pacientes_a_listas()
@@ -62,15 +66,25 @@ def run():
             buscar_turno()
             exit = input("Presione enter para continuar al menu principal")
             
-        if menu_selection == 9:
+        if menu_selection == 9: # Para cargar datos de prueba.
+            test()
+            print("Datos de prueba cargados satisfactoriamente.")
             exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 10:
             buscar_pacientes()
             exit = input("Presione enter para continuar al menu principal")
+
         if menu_selection == 11:
             print("Ha elegido listar pacientes según edad selecionada.")
             d,a,n,e = pacientes_a_listas()
             listadoMayores(d,a,n,e)
+            exit = input("Presione enter para continuar al menu principal")
+            
+        if menu_selection == 12:
+            dni = input("Ingrese el DNI del paciente para modificar el turno: ")
+            dni = validar_dni(dni)
+            modificar_turno(dni)
             exit = input("Presione enter para continuar al menu principal")
         if menu_selection == 0:
             break
